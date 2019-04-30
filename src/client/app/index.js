@@ -1,17 +1,22 @@
 import React, {Component} from 'react';
 import {Provider} from 'react-redux';
-import {Router, Route, browserHistory} from 'react-router';
+import {Route, Switch} from 'react-router';
+import {ConnectedRouter} from 'connected-react-router';
 
 import Home from './screens/Home';
 
-import configureStore from './store/configureStore';
+import configureStore, {history} from './store/configureStore';
 
 const store = configureStore({});
 
 export default () => (
     <Provider store={store}>
-        <Router history={browserHistory}>
-            <Route path="/" component={Home}/>
-        </Router>
+        <ConnectedRouter history={history}>
+            <>
+                <Switch>
+                    <Route path="/" component={Home}/>
+                </Switch>
+            </>
+        </ConnectedRouter>
     </Provider>
 );
