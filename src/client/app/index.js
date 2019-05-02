@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import {ConnectedRouter} from 'connected-react-router';
 
-import Home from './screens/Home';
+import Clients from './screens/Clients';
 
 import configureStore, {history} from './store/configureStore';
 
@@ -14,7 +14,7 @@ export default () => (
         <ConnectedRouter history={history}>
             <>
                 <Switch>
-                    <Route path="/" component={Home}/>
+                    <Route path="/" component={Clients}/>
                 </Switch>
             </>
         </ConnectedRouter>
