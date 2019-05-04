@@ -5,31 +5,22 @@ import {connect} from 'react-redux';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import {Link} from 'react-router-dom';
 
-import Header from '../../components/Header';
-import SideBar from '../../components/SideBar';
 import DataTable from '../../components/DataTable';
 import styles from './styles';
 import * as actions from '../../actions/clientsActions';
 
-class Home extends Component {
+class Clients extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            openSideBar: false
-        }
-
-        this.setSideBarOpen = this.setSideBarOpen.bind(this);
     }
 
     componentDidMount() {
-        const {getClients} = this.props;
-        getClients();
-    }
-
-    setSideBarOpen(event, openSideBar) {
-        this.setState({openSideBar});
+        const {getClients, clients} = this.props;
+        if(!clients || (clients && clients.length === 0)) {
+            getClients();
+        }
     }
 
     getListFields() {
@@ -42,31 +33,26 @@ class Home extends Component {
     }
 
     render(){
-        const {openSideBar} = this.state;
-        const {clients} = this.props;
+        const {clients, history} = this.props;
 
         return(
             <div>
-                <Header title="Titulares" setSideBarOpen={this.setSideBarOpen}/>
-                <div style={styles.content}>
-                    <Button variant="contained" style={styles.btn}>
-                        <AddIcon style={styles.icon}/>
-                        Agregar Titular
-                    </Button>
-                    <Divider/>
-                </div>
+                <Button variant="contained" style={styles.btn} onClick={() => history.push('/clients/new')}>
+                    <AddIcon style={styles.icon}/>
+                    Agregar Titular
+                </Button>
+                <Divider/>
                 <DataTable fields={this.getListFields()} rows={clients}/>
-                <SideBar openSideBar={openSideBar} setSideBarOpen={this.setSideBarOpen}/>
             </div>
         );
     }
 }
 
-Home.propTypes = {
+Clients.propTypes = {
     getClients: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({clients: state.clientsState.list});
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Clients);

@@ -28,7 +28,7 @@ const DataTable = ({fields, rows}) => (
             </TableRow>
         </TableHead>
         <TableBody>
-            {rows.length > 0 && rows.map(row => (
+            {rows !== null && rows.length > 0 && rows.map(row => (
                 <TableRow key={row.id}>
                     {fields.map((field, index) => (
                         <TableCell align="center" key={index + '-' + row.id + '-' + field.name}>
@@ -45,11 +45,20 @@ const DataTable = ({fields, rows}) => (
                     </TableCell>
                 </TableRow>
             ))}
-            {rows.length === 0 && <TableRow>
-                <TableCell align="center" colSpan={fields.length + 1}>
-                    NO HAY DATA
-                </TableCell>
-            </TableRow>}
+            {rows === null && (
+                <TableRow>
+                    <TableCell align="center" colSpan={fields.length + 1}>
+                        BUSCANDO DATA...
+                    </TableCell>
+                </TableRow>
+            )}
+            {rows !== null && rows.length === 0 && (
+                <TableRow>
+                    <TableCell align="center" colSpan={fields.length + 1}>
+                        NO HAY DATA
+                    </TableCell>
+                </TableRow>
+            )}
         </TableBody>
         </Table>
     </Paper>

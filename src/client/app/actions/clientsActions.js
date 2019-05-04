@@ -14,6 +14,24 @@ export const getClients = () => (
             return dispatch(onGetClients(clients));
         } catch (error) {
             console.log(error);
+            return dispatch(onGetClients([]));
+        }
+    }
+);
+
+const onGetSavedClient = saved => ({
+    type: 'GET_SAVED_CLIENT',
+    payload: {saved}
+});
+
+export const getSavedClient = body => (
+    async dispatch => {
+        try {
+            // const response = await fetch(config.url + '/clients');
+            // const clients = (await response.json()).rows;
+            return dispatch(onGetSavedClient(null));
+        } catch (error) {
+            console.log(error);
         }
     }
 );

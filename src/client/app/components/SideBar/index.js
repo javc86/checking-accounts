@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -21,25 +21,25 @@ const SideBar = ({openSideBar, setSideBarOpen}) => (
     >
         <div className={styles.fullList}>
             <List>
-                <div onClick={e => setSideBarOpen(e, false)}>
+                <Link to="/" onClick={e => setSideBarOpen(e, false)} style={styles.item}>
                     <ListItem button>
                         <ListItemIcon>
                             <AccountBox/>
                         </ListItemIcon>
                         <ListItemText primary="Titulares" />
                     </ListItem>
-                </div>
+                </Link>
             </List>
             <Divider/>
             <List>
-                <div onClick={e => setSideBarOpen(e, false)}>
+                <Link to="/accounts" onClick={e => setSideBarOpen(e, false)} style={styles.item}>
                     <ListItem button>
                         <ListItemIcon>
                             <AccountBalance/>
                         </ListItemIcon>
                         <ListItemText primary="Cuentas Corrientes" />
                     </ListItem>
-                </div>
+                </Link>
             </List>
         </div>
     </SwipeableDrawer>

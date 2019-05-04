@@ -6,11 +6,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case 'GET_CLIENTS':
-            return {...state, list: action.payload.clients};
-        case 'GET_SAVED_CLIENT':
+        case 'GET_ACCOUNTS':
+            return {...state, list: action.payload.accounts};
+        case 'GET_SAVED_ACCOUNT':
             return {...state, saved: action.payload.saved};
-        case 'GET_CLIENT_DETAILS':
+        case 'GET_ACCOUNT_DETAILS':
                 return {...state, details: action.payload.details};
         default:
             return state;

@@ -1,6 +1,9 @@
 const styles = {
     fullList: {
         width: 'auto'
+    },
+    item: {
+        textDecoration: 'none'
     }
 }
 

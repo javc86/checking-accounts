@@ -1,7 +1,4 @@
 const styles = {
-    content: {
-        marginTop: 80
-    },
     btn: {
         backgroundColor: '#43a047',
         color: 'white',
