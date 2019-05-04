@@ -1,9 +1,14 @@
-import cn from '../config';
+import mysql from 'mysql';
+import config from '../config';
 
 const clientsActions = {};
 
 clientsActions.list = () => (
     new Promise((resolve, reject) => {
+        const cn = mysql.createConnection(config);
+
+        cn.connect();
+
         const query = 'SELECT * FROM clients';
 
         cn.query(query, (err, rows, fields) => {
@@ -32,6 +37,8 @@ clientsActions.list = () => (
 
             resolve(JSON.stringify({rows: newRows}));
         });
+
+        cn.end();
     })
 );
 
