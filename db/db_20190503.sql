@@ -29,8 +29,9 @@ CREATE TABLE `accounts` (
   `currency` int(1) NOT NULL DEFAULT '0',
   `balance` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `client_id` (`client_id`),
-  CONSTRAINT `accounts_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+  UNIQUE KEY `number_UNIQUE` (`number`),
+  KEY `FK_accounts_clients` (`client_id`),
+  CONSTRAINT `FK_accounts_clients` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,7 +60,9 @@ CREATE TABLE `clients` (
   `business_name` varchar(100) DEFAULT NULL,
   `start_year` int(11) DEFAULT NULL,
   `type` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dni_UNIQUE` (`dni`),
+  UNIQUE KEY `cuit_UNIQUE` (`cuit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -87,8 +90,8 @@ CREATE TABLE `movements` (
   `amount` decimal(10,2) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `account_id` (`account_id`),
-  CONSTRAINT `movements_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`)
+  KEY `FK_movements_accounts` (`account_id`),
+  CONSTRAINT `FK_movements_accounts` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -110,4 +113,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-01 23:29:52
+-- Dump completed on 2019-05-03 19:35:20

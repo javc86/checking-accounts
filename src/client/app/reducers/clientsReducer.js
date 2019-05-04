@@ -1,11 +1,11 @@
 const initialState = {
-    accounts: []
+    list: []
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case 'GET_ACCOUNTS':
-            return {...state, accounts: actions.payload.accounts};
+        case 'GET_CLIENTS':
+            return {...state, list: action.payload.clients};
         default:
             return state;
     }

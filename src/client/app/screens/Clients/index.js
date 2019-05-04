@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -7,77 +10,41 @@ import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
 import DataTable from '../../components/DataTable';
 import styles from './styles';
+import * as actions from '../../actions/clientsActions';
 
 class Home extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            openSideBar: false,
-            clients: {
-                fields: [
-                    {name: 'id', desc: 'Id'},
-                    {name: 'dni', desc: 'DNI'},
-                    {name: 'name', desc: 'Nombre'},
-                    {name: 'lastname', desc: 'Apellido'},
-                    {name: 'number', desc: 'Número de Cuenta'},
-                    {name: 'currency', desc: 'Moneda'},
-                    {name: 'balance', desc: 'Saldo'}
-                ],
-                rows: [
-                    {
-                        id: 1,
-                        dni: 1651561,
-                        name: 'José',
-                        lastname: 'Alvares',
-                        number: 25264514585949,
-                        currency: 'Pesos',
-                        balance: 700.00
-
-                    },
-                    {
-                        id: 2,
-                        dni: 963698,
-                        name: 'Manuel',
-                        lastname: 'Rodriguez',
-                        number: 778996589,
-                        currency: 'U$S',
-                        balance: 1500.00
-
-                    },
-                    {
-                        id: 3,
-                        dni: 4055928,
-                        name: 'Natalia',
-                        lastname: 'Rengifo',
-                        number: 336554456985,
-                        currency: 'Euros',
-                        balance: 300.00
-
-                    },
-                    {
-                        id: 4,
-                        dni: 1323232,
-                        name: 'Analie',
-                        lastname: 'Richard',
-                        number: 4455588223,
-                        currency: 'Pesos',
-                        balance: 20000.00
-
-                    }
-                ]
-            }
+            openSideBar: false
         }
 
         this.setSideBarOpen = this.setSideBarOpen.bind(this);
+    }
+
+    componentDidMount() {
+        const {getClients} = this.props;
+        getClients();
     }
 
     setSideBarOpen(event, openSideBar) {
         this.setState({openSideBar});
     }
 
+    getListFields() {
+        return [
+            {name: 'id', desc: 'ID'},
+            {name: 'dniCuit', desc: 'DNI / CUIT'},
+            {name: 'nombreRazonSocialAnioInicio', desc: 'NOMBRE / RAZÓN SOCIAL / AÑO DE INICIO'},
+            {name: 'tipo', desc: 'TIPO DE TITULAR'}
+        ];
+    }
+
     render(){
-        const {openSideBar, clients} = this.state;
+        const {openSideBar} = this.state;
+        const {clients} = this.props;
+
         return(
             <div>
                 <Header title="Titulares" setSideBarOpen={this.setSideBarOpen}/>
@@ -88,11 +55,18 @@ class Home extends Component {
                     </Button>
                     <Divider/>
                 </div>
-                <DataTable fields={clients.fields} rows={clients.rows}/>
+                <DataTable fields={this.getListFields()} rows={clients}/>
                 <SideBar openSideBar={openSideBar} setSideBarOpen={this.setSideBarOpen}/>
             </div>
         );
     }
 }
 
-export default Home;
+Home.propTypes = {
+    getClients: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({clients: state.clientsState.list});
+const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
