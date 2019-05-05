@@ -159,9 +159,9 @@ accountsActions.details = id => (
 
                         const movements = result2.map(movement => ({
                             id: movement.id,
-                            desc: movement.description,
+                            desc: movement.description.toUpperCase(),
                             type: movement.type === 0 ? 'Debito' : 'Credito',
-                            amount: movement.movement,
+                            amount: movement.amount,
                             date: moment(movement.date).format('MM-DD-YYYY HH:mm')
                         }));
 
@@ -194,8 +194,10 @@ accountsActions.delete = id => (
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
             }
 
-            if (result.total > 0) {
-                resolve(JSON.stringify({error: 'No se puede eliminar la cuenta porque tiene movimientos asociados a su cuenta'}));
+            console.log('result', result[0].total);
+
+            if (result[0].total > 0) {
+                resolve(JSON.stringify({error: 'No se puede eliminar la cuenta porque tiene movimientos asociados'}));
                 cn.end();
             } else {
                 query = 'DELETE FROM accounts WHERE id = ' + id;
