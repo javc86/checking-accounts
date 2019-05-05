@@ -114,7 +114,7 @@ clientsActions.details = id => (
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
             }
 
-            resolve(JSON.stringify({result: result.length > 0? result[0] : {}}));
+            resolve(JSON.stringify({result: result.length > 0 ? result[0] : {}}));
         });
 
         cn.end();

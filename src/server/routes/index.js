@@ -2,6 +2,7 @@ import express from 'express';
 import _ from 'lodash';
 import moment from 'moment';
 import clientsActions from '../actions/clientsActions';
+import accountsActions from '../actions/accountsActions';
 
 const api = express.Router();
 
@@ -107,23 +108,76 @@ api.get('/clients/delete/:id', async (req, res) => {
     }
 });
 
-api.get('/accounts', (req, res) => {
-    res.send('lista de cuentas corriente');
+api.get('/accounts', async (req, res) => {
+    try {
+        const response = await accountsActions.list();
+        res.send(JSON.parse(response));
+    } catch (error) {
+        res.send({error: error});
+    }
 });
 
-api.post('/accounts/save', (req, res) => {
-    res.send('Creando cuenta');
+api.get('/clientswithoutaccount', async (req, res) => {
+    try {
+        const response = await accountsActions.clientsWithoutAccount();
+        res.send(JSON.parse(response));
+    } catch (error) {
+        res.send({error: error});
+    }
 });
 
-api.get('/accounts/:id', (req, res) => {
+api.post('/accounts/save', async (req, res) => {
+    try {
+        let save = true;
+        if(_.isEmpty(req.body)) {
+            res.send({error: 'Data de la cuenta vacia'});
+            save = false;
+        }
+
+        if(req.body.client_id === undefined || (
+                req.body.client_id !== undefined && (req.body.client_id === '' || req.body.client_id === null || !/^[0-9]*$/.test(req.body.client_id))
+            )
+        ) {
+            res.send({error: 'No hay Titular asignado a la cuenta. Debe ser agregado un ID númerico'});
+            save = false;
+        }
+
+        if(req.body.currency === undefined || (
+                req.body.currency !== undefined && (req.body.currency === '' || req.body.currency === null || !/^[0-2]?1*$/.test(req.body.currency))
+            )
+        ) {
+            res.send({error: 'Debe asígnar el tipo de moneda de la cuenta. Los valores validos son 0 (Pesos), 1 (Dolar) y 2 (Euro)'});
+            save = false;
+        }
+
+        if(
+            req.body.balance === undefined || (
+                req.body.balance !== undefined && (req.body.balance === '' || req.body.balance === null || !/^\d+(\.\d{1,2})?$/.test(req.body.balance))
+            )
+        ) {
+            res.send({error: 'Debe indicar el monto de la cuenta con 2 decimales como máximo y separado por punto (#####.##)'});
+            save = false;
+        }
+
+        if (save) {
+            const response = await accountsActions.save(req.body);
+            res.send(JSON.parse(response));
+        }
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+});
+
+api.get('/accounts/:id', async (req, res) => {
     res.send('Detalle de la cuenta corriente');
 });
 
-api.get('/accounts/delete/:id', (req, res) => {
+api.get('/accounts/delete/:id', async (req, res) => {
     res.send('Eliminar cuenta');
 });
 
-api.post('/movements/save', (req, res) => {
+api.post('/movements/save', async (req, res) => {
     res.send('Creando cuenta');
 });
 

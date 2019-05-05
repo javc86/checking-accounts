@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import {Link} from 'react-router-dom';
 
 import DataTable from '../../components/DataTable';
 import Alert from '../../components/Alert';
@@ -54,7 +53,6 @@ class Clients extends Component {
     render(){
         const {showAlert} = this.state;
         const {clients, history, deleted} = this.props;
-        if(deleted !== null) console.log(deleted);
 
         return(
             <div>
@@ -68,6 +66,7 @@ class Clients extends Component {
                     rows={clients !== null ? clients : []}
                     deleteData={this.deleteClient}
                     module="clients"
+                    actions={{'edit': true, 'view': true, 'delete': true}}
                 />
                 {showAlert && deleted !== null && (
                     <Alert

@@ -11,10 +11,11 @@ import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
+import _ from 'lodash';
 
 import styles from './styles';
 
-const DataTable = ({fields, rows, module, deleteData}) => (
+const DataTable = ({fields, rows, module, deleteData, actions}) => (
     <Paper style={styles.container}>
         <Table style={styles.table}>
         <TableHead>
@@ -24,9 +25,11 @@ const DataTable = ({fields, rows, module, deleteData}) => (
                         {field.desc.toUpperCase()}
                     </TableCell>
                 ))}
-                <TableCell align="center">
-                    ACCIONES
-                </TableCell>
+                {actions && !_.isEmpty(actions) && (
+                    <TableCell align="center">
+                        ACCIONES
+                    </TableCell>
+                )}
             </TableRow>
         </TableHead>
         <TableBody>
@@ -37,23 +40,25 @@ const DataTable = ({fields, rows, module, deleteData}) => (
                             {row[field.name]}
                         </TableCell>
                     ))}
-                    <TableCell align="center">
-                        <Link to={`/${module}/edit/${row.id}`} style={styles.item}>
-                            <Fab size="small" aria-label="Add" style={styles.btnEdit}>
-                                <EditIcon fontSize="small"/>
-                            </Fab>
-                        </Link>
-                        <Link to={`/${module}/details/${row.id}`} style={styles.item}>
-                            <Fab size="small" aria-label="Add" style={styles.btnView}>
-                                <VisibilityIcon fontSize="small"/>
-                            </Fab>
-                        </Link>
-                        <Link to="" onClick={e => deleteData(e, row.id)} style={styles.item}>
-                            <Fab size="small" aria-label="Add" style={styles.btnDelete}>
-                                <DeleteIcon fontSize="small"/>
-                            </Fab>
-                        </Link>
-                    </TableCell>
+                    {actions && !_.isEmpty(actions) && (
+                        <TableCell align="center">
+                            {actions.edit && <Link to={`/${module}/edit/${row.id}`} style={styles.item}>
+                                <Fab size="small" aria-label="Add" style={styles.btnEdit}>
+                                    <EditIcon fontSize="small"/>
+                                </Fab>
+                            </Link>}
+                            {actions.view && <Link to={`/${module}/details/${row.id}`} style={styles.item}>
+                                <Fab size="small" aria-label="Add" style={styles.btnView}>
+                                    <VisibilityIcon fontSize="small"/>
+                                </Fab>
+                            </Link>}
+                            {actions.delete && <Link to="" onClick={e => deleteData(e, row.id)} style={styles.item}>
+                                <Fab size="small" aria-label="Add" style={styles.btnDelete}>
+                                    <DeleteIcon fontSize="small"/>
+                                </Fab>
+                            </Link>}
+                        </TableCell>
+                    )}
                 </TableRow>
             ))}
             {rows === null && (
@@ -80,6 +85,7 @@ DataTable.propTypes = {
     rows: PropTypes.array.isRequired,
     module: PropTypes.string.isRequired,
     deleteData: PropTypes.func.isRequired,
+    actions: PropTypes.object
 };
 
 export default DataTable;
