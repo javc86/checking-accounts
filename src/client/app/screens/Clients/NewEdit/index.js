@@ -81,7 +81,8 @@ class NewEditClient extends Component {
                 name: false,
                 lastname: false,
                 business_name: false
-            }
+            },
+            showAlert: false
         });
 
         history.push('/');
