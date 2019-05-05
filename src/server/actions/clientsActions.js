@@ -127,7 +127,7 @@ clientsActions.delete = id => (
 
         cn.connect();
 
-        const query = `SELECT COUNT(*) as total FROM clients c
+        let query = `SELECT COUNT(*) as total FROM clients c
                         INNER JOIN accounts a ON c.id = a.client_id
                         INNER JOIN movements m ON a.id = m.account_id
                         WHERE c.id = ` + id;
@@ -152,7 +152,7 @@ clientsActions.delete = id => (
 
                     resolve(JSON.stringify({result: 1}));
                 });
-                
+
                 cn.end();
             }
         });

@@ -1,4 +1,5 @@
 import mysql from 'mysql';
+import moment from 'moment';
 import config from '../config';
 
 const accountsActions = {};
@@ -102,8 +103,6 @@ accountsActions.save = data => (
                                     ${data.balance}
                                 );`;
 
-                console.log('query', query);
-
                 cn.query(query, (err, result) => {
                     if (err) {
                         const errorJson = JSON.parse(JSON.stringify(err));
@@ -157,10 +156,16 @@ accountsActions.details = id => (
                         resolve(JSON.stringify({error: errorJson.sqlMessage}));
                         cn.end();
                     } else {
-                        const dataJson = {
-                            account: account,
-                            movements: result2
-                        }
+
+                        const movements = result2.map(movement => ({
+                            id: movement.id,
+                            desc: movement.description,
+                            type: movement.type === 0 ? 'Debito' : 'Credito',
+                            amount: movement.movement,
+                            date: moment(movement.date).format('MM-DD-YYYY HH:mm')
+                        }));
+
+                        const dataJson = {account, movements}
 
                         resolve(JSON.stringify({result: dataJson}));
                         cn.end();
@@ -172,6 +177,41 @@ accountsActions.details = id => (
             }
         });
 
+    })
+);
+
+accountsActions.delete = id => (
+    new Promise((resolve, reject) => {
+        const cn = mysql.createConnection(config);
+
+        cn.connect();
+
+        let query = `SELECT COUNT(*) as total FROM movements WHERE account_id = ` + id;
+
+        cn.query(query, (err, result) => {
+            if (err) {
+                const errorJson = JSON.parse(JSON.stringify(err));
+                resolve(JSON.stringify({error: errorJson.sqlMessage}));
+            }
+
+            if (result.total > 0) {
+                resolve(JSON.stringify({error: 'No se puede eliminar la cuenta porque tiene movimientos asociados a su cuenta'}));
+                cn.end();
+            } else {
+                query = 'DELETE FROM accounts WHERE id = ' + id;
+
+                cn.query(query, (err) => {
+                    if (err) {
+                        const errorJson = JSON.parse(JSON.stringify(err));
+                        resolve(JSON.stringify({error: errorJson.sqlMessage}));
+                    }
+
+                    resolve(JSON.stringify({result: 1}));
+                });
+
+                cn.end();
+            }
+        });
     })
 );
 

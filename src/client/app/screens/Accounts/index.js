@@ -19,6 +19,9 @@ class Accounts extends Component {
         this.state = {
             showAlert: false
         };
+
+        this.deleteAccount = this.deleteAccount.bind(this);
+        this.closeAlert = this.closeAlert.bind(this);
     }
 
     componentDidMount() {
@@ -43,10 +46,10 @@ class Accounts extends Component {
     }
 
     deleteAccount(event, id) {
-        // const {getDeleteClient} = this.props;
-        // getDeleteAccount(id, () => {
-        //     this.setState({showAlert: true});
-        // });
+        const {getDeleteAccount} = this.props;
+        getDeleteAccount(id, () => {
+            this.setState({showAlert: true});
+        });
     }
 
     render(){
@@ -69,7 +72,7 @@ class Accounts extends Component {
                 />
                 {showAlert && deleted !== null && (
                     <Alert
-                        text={deleted.error ? deleted.error : 'Titular eliminado con EXITO!!'}
+                        text={deleted.error ? deleted.error : 'Cuenta eliminada con EXITO!!'}
                         type={deleted.error ? 'error' : 'success'}
                         close={this.closeAlert}
                     />
@@ -81,6 +84,7 @@ class Accounts extends Component {
 
 Accounts.propTypes = {
     getAccounts: PropTypes.func.isRequired,
+    getDeleteAccount: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

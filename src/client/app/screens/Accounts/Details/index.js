@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
+import DataTable from '../../../components/DataTable';
 import * as actions from '../../../actions/accountsActions';
 import styles from './styles';
 
@@ -28,9 +29,19 @@ class DetailsAccount extends Component {
         history.push('/accounts');
     }
 
+    getListFields() {
+        return [
+            {name: 'id', desc: 'ID'},
+            {name: 'desc', desc: 'DESCRIPCIÓN'},
+            {name: 'type', desc: 'TIPO DE MOVIMIENTO'},
+            {name: 'amount', desc: 'IMPORTE'},
+            {name: 'date', desc: 'FECHA'}
+        ];
+    }
+
     render() {
         const {details} = this.props;
-        if(details !== null) console.log('details', details);
+
         return(
             <div style={styles.container}>
                 <Typography variant="h5" style={styles.title}>
@@ -94,6 +105,14 @@ class DetailsAccount extends Component {
                         </div>
                     </div>
                 </div>
+                <Divider/>
+                <Typography variant="h5" style={styles.title}>
+                    Movimientos
+                </Typography>
+                <DataTable
+                    fields={this.getListFields()}
+                    rows={details !== null ? details.movements : []}
+                />
                 <Divider/>
                 <div style={styles.btnForm}>
                     <Button variant="contained" style={styles.btnCancel} onClick={() => this.back()}>

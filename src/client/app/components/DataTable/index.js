@@ -42,21 +42,25 @@ const DataTable = ({fields, rows, module, deleteData, actions}) => (
                     ))}
                     {actions && !_.isEmpty(actions) && (
                         <TableCell align="center">
-                            {actions.edit && <Link to={`/${module}/edit/${row.id}`} style={styles.item}>
-                                <Fab size="small" aria-label="Add" style={styles.btnEdit}>
-                                    <EditIcon fontSize="small"/>
-                                </Fab>
-                            </Link>}
-                            {actions.view && <Link to={`/${module}/details/${row.id}`} style={styles.item}>
-                                <Fab size="small" aria-label="Add" style={styles.btnView}>
-                                    <VisibilityIcon fontSize="small"/>
-                                </Fab>
-                            </Link>}
-                            {actions.delete && <Link to="" onClick={e => deleteData(e, row.id)} style={styles.item}>
-                                <Fab size="small" aria-label="Add" style={styles.btnDelete}>
+                            {actions.edit && (
+                                <Link to={`/${module}/edit/${row.id}`}>
+                                    <Fab size="small" aria-label="Add" style={styles.btnEdit}>
+                                        <EditIcon fontSize="small"/>
+                                    </Fab>
+                                </Link>
+                            )}
+                            {actions.view && 8
+                                <Link to={`/${module}/details/${row.id}`}>
+                                    <Fab size="small" aria-label="Add" style={styles.btnView}>
+                                        <VisibilityIcon fontSize="small"/>
+                                    </Fab>
+                                </Link>
+                            )}
+                            {actions.delete && (
+                                <Fab size="small" aria-label="Add" style={styles.btnDelete} onClick={e => deleteData(e, row.id)}>
                                     <DeleteIcon fontSize="small"/>
                                 </Fab>
-                            </Link>}
+                            )}
                         </TableCell>
                     )}
                 </TableRow>
@@ -83,8 +87,8 @@ const DataTable = ({fields, rows, module, deleteData, actions}) => (
 DataTable.propTypes = {
     fields: PropTypes.array.isRequired,
     rows: PropTypes.array.isRequired,
-    module: PropTypes.string.isRequired,
-    deleteData: PropTypes.func.isRequired,
+    module: PropTypes.string,
+    deleteData: PropTypes.func,
     actions: PropTypes.object
 };
 

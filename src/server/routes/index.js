@@ -179,7 +179,12 @@ api.get('/accounts/:id', async (req, res) => {
 });
 
 api.get('/accounts/delete/:id', async (req, res) => {
-    res.send('Eliminar cuenta');
+    try {
+        const response = await accountsActions.delete(req.params.id);
+        res.send(JSON.parse(response));
+    } catch (error) {
+        res.send({error: error});
+    }
 });
 
 api.post('/movements/save', async (req, res) => {

@@ -74,17 +74,18 @@ export const getDetailAccount = id => (
     }
 );
 
-const onGetDetailClient = details => ({
-    type: 'GET_CLIENT_DETAILS',
-    payload: {details}
+const onDeleteAccount = deleted => ({
+    type: 'GET_DELETED_ACCOUNT',
+    payload: {deleted}
 });
 
-export const getDetailClient = id => (
+export const getDeleteAccount = (id, callback) => (
     async dispatch => {
         try {
-            const response = await fetch(config.url + '/clients/' + id);
-            const details = (await response.json()).result;
-            return dispatch(onGetDetailClient(details));
+            const response = await fetch(config.url + '/accounts/delete/' + id);
+            const deleted = (await response.json());
+            callback();
+            return dispatch(onDeleteAccount(deleted));
         } catch (error) {
             console.log(error);
         }
