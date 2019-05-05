@@ -30,7 +30,7 @@ class DetailsClient extends Component {
 
     render() {
         const {details} = this.props;
-        if(details !== null) console.log('details', details);
+
         return(
             <div style={styles.container}>
                 <Typography variant="h5" style={styles.title}>
