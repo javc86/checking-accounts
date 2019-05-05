@@ -9,6 +9,7 @@ import Clients from './screens/Clients';
 import NewEditClient from './screens/Clients/NewEdit';
 import Accounts from './screens/Accounts';
 import NewEditAccount from './screens/Accounts/NewEdit';
+import DetailsClient from './screens/Clients/Details';
 
 class App extends Component {
     constructor(props) {
@@ -30,11 +31,19 @@ class App extends Component {
             '/': 'Lista de Titulares',
             '/clients/new': 'Nuevo Titular',
             '/clients/edit': 'Editar Titular',
+            '/clients/details': 'Información de Titular',
             '/accounts': 'Lista de Cuentas',
             '/accounts/new': 'Nueva Cuenta',
         };
 
-        return titles[pathname];
+        let newPath = pathname;
+        const arrayPath = pathname.split('/')
+        if(arrayPath.length > 3 && (pathname.indexOf('edit') > -1 || pathname.indexOf('details') > -1)) {
+            arrayPath.splice(arrayPath.length - 1);
+            newPath = arrayPath.join('/');
+        }
+
+        return titles[newPath];
     }
 
     render() {
@@ -48,6 +57,7 @@ class App extends Component {
                     <Route exact path="/" component={Clients}/>
                     <Route path="/clients/new" component={NewEditClient}/>
                     <Route path="/clients/edit/:id" component={NewEditClient}/>
+                    <Route path="/clients/details/:id" component={DetailsClient}/>
                     <Route path="/accounts" component={Accounts}/>
                     <Route path="/accounts/new" component={NewEditAccount}/>
                 </Switch>

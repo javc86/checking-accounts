@@ -77,7 +77,7 @@ class NewEditClient extends Component {
         const {form, inputErrors} = this.state;
         form[e.target.name] = e.target.value;
         inputErrors[e.target.name] = e.target.value !== '' ? false : true;
-    
+
         this.setState({form});
     }
 
@@ -90,7 +90,7 @@ class NewEditClient extends Component {
         return arrayYears;
     }
 
-    cancel() {
+    back() {
         const {history} = this.props;
 
         this.setState({
@@ -292,8 +292,8 @@ class NewEditClient extends Component {
                 </div>
                 <Divider/>
                 <div style={styles.btnForm}>
-                    <Button variant="contained" style={styles.btnCancel} onClick={() => this.cancel()}>
-                        Cancelar
+                    <Button variant="contained" style={styles.btnCancel} onClick={() => this.back()}>
+                        Regresar
                     </Button>
                     <Button variant="contained" style={styles.btnSave} onClick={() => this.save()}>
                         Guardar

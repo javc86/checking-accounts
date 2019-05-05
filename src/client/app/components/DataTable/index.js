@@ -43,9 +43,11 @@ const DataTable = ({fields, rows}) => (
                                 <EditIcon fontSize="small"/>
                             </Fab>
                         </Link>
-                        <Fab size="small" aria-label="Add" style={styles.btnView}>
-                            <VisibilityIcon fontSize="small"/>
-                        </Fab>
+                        <Link to={'/clients/details/' + row.id} style={styles.item}>
+                            <Fab size="small" aria-label="Add" style={styles.btnView}>
+                                <VisibilityIcon fontSize="small"/>
+                            </Fab>
+                        </Link>
                         <Fab size="small" aria-label="Add" style={styles.btnDelete}>
                             <DeleteIcon fontSize="small"/>
                         </Fab>
