@@ -14,6 +14,15 @@ api.get('/clients', async (req, res) => {
     }
 });
 
+api.get('/clients/:id', async (req, res) => {
+    try {
+        const response = await clientsActions.details(req.params.id);
+        res.send(JSON.parse(response));
+    } catch (error) {
+        res.send({error: error});
+    }
+});
+
 api.post('/clients/save', async (req, res) => {
     try {
         let save = true;

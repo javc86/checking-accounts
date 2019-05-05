@@ -64,37 +64,32 @@ clientsActions.save = data => (
                 }));
             }
 
-            if (result && result.length > 0) {
+            if (result && result.length > 0 && (data.id === null || data.id === undefined)) {
                 resolve(JSON.stringify({error: 'El titula ya existe en la base de datos'}));
                 cn.end();
             } else {
                 if (!data.id || (data.id && data.id === null)) {
                     query = `INSERT INTO clients (dni, cuit, name, lastname, business_name, start_year, type)
                                     VALUES (
-                                        ${data.dni && data.dni !== '' ? data.dni : null},
+                                        ${data.dni && data.dni !== null && data.dni !== '' && data.type === 0 ? data.dni : null},
                                         ${data.cuit},
-                                        ${data.name && data.name !== '' ? '\'' + data.name + '\'' : null},
-                                        ${data.lastname && data.lastname !== '' ? '\'' + data.lastname + '\'' : null},
-                                        ${data.business_name && data.business_name !== '' ? '\'' + data.business_name + '\'' : null},
-                                        ${data.start_year && data.start_year !== '' ? data.start_year : null},
+                                        ${data.name && data.name !== null && data.name !== '' && data.type === 0 ? '\'' + data.name + '\'' : null},
+                                        ${data.lastname && data.lastname !== null && data.lastname !== '' && data.type === 0 ? '\'' + data.lastname + '\'' : null},
+                                        ${data.business_name && data.business_name !== null && data.business_name !== '' && data.type === 1 ? '\'' + data.business_name + '\'' : null},
+                                        ${data.start_year && data.start_year !== null && data.start_year !== '' && data.type === 1 ? data.start_year : null},
                                         ${data.type}
                                     );`;
                 } else {
                     query = `UPDATE clients
-                                SET cuit = ${data.cuit}, type = ${data.type}
-                                    dni = ${data.dni},
+                                SET cuit = ${data.cuit}, type = ${data.type}`;
 
-                                    name = ${data.name},
-                                    lastname = ${data.lastname},
-                                    business_name = ${data.business_name},
-                                    start_year = ${data.start_year}
-                                WHERE id = ${data.id};`;
+                    console.log(data);
 
-                    if (data.dni) query += `, dni = ${data.dni}`;
-                    if (data.name) query += `, name = ${data.name}`;
-                    if (data.lastname) query += `, lastname = ${data.lastname}`;
-                    if (data.business_name) query += `, business_name = ${data.business_name}`;
-                    if (data.start_year) query += `, start_year = ${data.start_year}`;
+                    if (data.dni) query += `, dni = ${data.dni && data.dni !== null && data.dni !== '' && data.type === 0 ? data.dni : null}`;
+                    if (data.name) query += `, name = ${data.name && data.name !== null && data.name !== '' && data.type === 0 ? '\'' + data.name + '\'' : null}`;
+                    if (data.lastname) query += `, lastname = ${data.lastname && data.lastname !== null && data.lastname !== '' && data.type === 0 ? '\'' + data.lastname + '\'' : null}`;
+                    if (data.business_name) query += `, business_name = ${data.business_name && data.business_name !== null && data.business_name !== '' && data.type === 1 ? '\'' + data.business_name + '\'' : null}`;
+                    if (data.start_year) query += `, start_year = ${data.start_year && data.start_year !== null && data.start_year !== '' && data.type === 1 ? data.start_year : null}`;
 
                     query += ` WHERE id = ${data.id};`;
                 }
@@ -117,6 +112,32 @@ clientsActions.save = data => (
                 cn.end();
             }
         });
+    })
+);
+
+clientsActions.details = id => (
+    new Promise((resolve, reject) => {
+        const cn = mysql.createConnection(config);
+
+        cn.connect();
+
+        const query = 'SELECT * FROM clients WHERE id = ' + id;
+
+        cn.query(query, (err, result, fields) => {
+            if (err) {
+                const errorJson = JSON.parse(JSON.stringify(err));
+                resolve(JSON.stringify({
+                    error: {
+                        code: errorJson.code,
+                        message: errorJson.sqlMessage
+                    }
+                }));
+            }
+
+            resolve(JSON.stringify({result: result.length > 0? result[0] : {}}));
+        });
+
+        cn.end();
     })
 );
 

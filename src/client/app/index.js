@@ -29,8 +29,9 @@ class App extends Component {
         const titles = {
             '/': 'Lista de Titulares',
             '/clients/new': 'Nuevo Titular',
+            '/clients/edit': 'Editar Titular',
             '/accounts': 'Lista de Cuentas',
-            '/accounts/new': 'Nueva Cuenta'
+            '/accounts/new': 'Nueva Cuenta',
         };
 
         return titles[pathname];
@@ -46,6 +47,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" component={Clients}/>
                     <Route path="/clients/new" component={NewEditClient}/>
+                    <Route path="/clients/edit/:id" component={NewEditClient}/>
                     <Route path="/accounts" component={Accounts}/>
                     <Route path="/accounts/new" component={NewEditAccount}/>
                 </Switch>

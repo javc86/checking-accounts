@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import EditIcon from '@material-ui/icons/Edit';
 
 import styles from './styles';
 
@@ -36,11 +38,16 @@ const DataTable = ({fields, rows}) => (
                         </TableCell>
                     ))}
                     <TableCell align="center">
-                        <Fab size="small" aria-label="Add" style={styles.btnDelete}>
-                            <DeleteIcon fontSize="small"/>
-                        </Fab>
+                        <Link to={'/clients/edit/' + row.id} style={styles.item}>
+                            <Fab size="small" aria-label="Add" style={styles.btnEdit}>
+                                <EditIcon fontSize="small"/>
+                            </Fab>
+                        </Link>
                         <Fab size="small" aria-label="Add" style={styles.btnView}>
                             <VisibilityIcon fontSize="small"/>
+                        </Fab>
+                        <Fab size="small" aria-label="Add" style={styles.btnDelete}>
+                            <DeleteIcon fontSize="small"/>
                         </Fab>
                     </TableCell>
                 </TableRow>

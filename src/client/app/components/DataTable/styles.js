@@ -18,6 +18,12 @@ const styles = {
         color: 'white',
         marginLeft: 2.5,
         marginRight: 2.5
+    },
+    btnEdit: {
+        backgroundColor: '#388e3c',
+        color: 'white',
+        marginLeft: 2.5,
+        marginRight: 2.5
     }
 };
 

@@ -49,9 +49,9 @@ const onGetDetailClient = details => ({
 export const getDetailClient = id => (
     async dispatch => {
         try {
-            // const response = await fetch(config.url + '/clients');
-            // const clients = (await response.json()).rows;
-            return dispatch(onGetDetailClient(null));
+            const response = await fetch(config.url + '/clients/' + id);
+            const details = (await response.json()).result;
+            return dispatch(onGetDetailClient(details));
         } catch (error) {
             console.log(error);
         }

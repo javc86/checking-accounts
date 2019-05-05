@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
+import _ from 'lodash';
 
 import * as actions from '../../../actions/clientsActions';
 import Alert from '../../../components/Alert';
@@ -46,10 +47,37 @@ class NewEditClient extends Component {
         this.closeAlert = this.closeAlert.bind(this);
     }
 
+    componentDidMount() {
+        const {form} = this.state;
+        const {getDetailClient} = this.props;
+        if (form.id !== null) {
+            getDetailClient(form.id);
+        }
+    }
+
+    shouldComponentUpdate(nextProps) {
+        const {form} = this.state;
+        const {details} = nextProps;
+        if(details !== null && !_.isEmpty(details) && form.cuit === '')
+            this.setState({form: {
+                id: details.id,
+                dni: details.dni !== null ? details.dni : '',
+                cuit: details.cuit !== null ? details.cuit : '',
+                name: details.name !== null ? details.name : '',
+                lastname: details.lastname !== null ? details.lastname : '',
+                business_name: details.business_name !== null ? details.business_name : '',
+                start_year: details.start_year !== null ? details.start_year : parseInt(moment().format('YYYY')),
+                type: details.type
+            }});
+
+        return true;
+    }
+
     handleChange(e) {
         const {form, inputErrors} = this.state;
         form[e.target.name] = e.target.value;
         inputErrors[e.target.name] = e.target.value !== '' ? false : true;
+    
         this.setState({form});
     }
 
@@ -112,7 +140,7 @@ class NewEditClient extends Component {
 
         if (formValid) {
             getSavedClient(form, saved => {
-                if (saved.result) {
+                if (saved.result && form.dni === null) {
                     this.setState({
                         form: {
                             dni: '',
@@ -145,12 +173,12 @@ class NewEditClient extends Component {
 
     render() {
         const {form, inputErrors, showAlert} = this.state;
-        const {saved} = this.props;
+        const {saved, details} = this.props;
 
         return(
             <div style={styles.container}>
                 <Typography variant="h5" style={styles.title}>
-                    Agregar Datos del Titular
+                    {form.id === null ? 'Agregar' : 'Editar'} Datos del Titular
                 </Typography>
                 <Divider/>
                 <div style={styles.form}>
@@ -284,10 +312,14 @@ class NewEditClient extends Component {
 }
 
 NewEditClient.propTypes = {
-    getSavedClient: PropTypes.func.isRequired
+    getSavedClient: PropTypes.func.isRequired,
+    getDetailClient: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({saved: state.clientsState.saved});
+const mapStateToProps = state => ({
+    saved: state.clientsState.saved,
+    details: state.clientsState.details
+});
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewEditClient);
