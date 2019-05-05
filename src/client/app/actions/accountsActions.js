@@ -34,3 +34,20 @@ export const getSavedAccount = body => (
         }
     }
 );
+
+const onGetDetailAccount = details => ({
+    type: 'GET_ACCOUNT_DETAILS',
+    payload: {details}
+});
+
+export const getDetailAccount = id => (
+    async dispatch => {
+        try {
+            // const response = await fetch(config.url + '/clients');
+            // const clients = (await response.json()).rows;
+            return dispatch(onGetDetailAccount(null));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);

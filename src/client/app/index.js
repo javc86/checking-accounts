@@ -28,7 +28,7 @@ class App extends Component {
     setTitleHeader(pathname) {
         const titles = {
             '/': 'Lista de Titulares',
-            '/clients/new': 'Nuevo Cliente',
+            '/clients/new': 'Nuevo Titular',
             '/accounts': 'Lista de Cuentas',
             '/accounts/new': 'Nueva Cuenta'
         };

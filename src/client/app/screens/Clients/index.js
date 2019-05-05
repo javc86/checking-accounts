@@ -18,9 +18,7 @@ class Clients extends Component {
 
     componentDidMount() {
         const {getClients, clients} = this.props;
-        if(!clients || (clients && clients.length === 0)) {
-            getClients();
-        }
+        getClients();
     }
 
     getListFields() {
