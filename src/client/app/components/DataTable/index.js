@@ -49,7 +49,7 @@ const DataTable = ({fields, rows, module, deleteData, actions}) => (
                                     </Fab>
                                 </Link>
                             )}
-                            {actions.view && 8
+                            {actions.view && (
                                 <Link to={`/${module}/details/${row.id}`}>
                                     <Fab size="small" aria-label="Add" style={styles.btnView}>
                                         <VisibilityIcon fontSize="small"/>

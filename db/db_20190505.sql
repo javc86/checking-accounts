@@ -32,7 +32,7 @@ CREATE TABLE `accounts` (
   UNIQUE KEY `number_UNIQUE` (`number`),
   KEY `FK_accounts_clients` (`client_id`),
   CONSTRAINT `FK_accounts_clients` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `accounts` (
 
 LOCK TABLES `accounts` WRITE;
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
+INSERT INTO `accounts` VALUES (12,22,98765432,1,29325.80);
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,7 +54,7 @@ DROP TABLE IF EXISTS `clients`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `clients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dni` int(11) NOT NULL,
+  `dni` int(11) DEFAULT NULL,
   `cuit` int(11) NOT NULL,
   `name` varchar(80) DEFAULT NULL,
   `lastname` varchar(255) DEFAULT NULL,
@@ -61,9 +62,9 @@ CREATE TABLE `clients` (
   `start_year` int(11) DEFAULT NULL,
   `type` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `dni_UNIQUE` (`dni`),
-  UNIQUE KEY `cuit_UNIQUE` (`cuit`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `cuit_UNIQUE` (`cuit`),
+  UNIQUE KEY `dni_UNIQUE` (`dni`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,6 +73,7 @@ CREATE TABLE `clients` (
 
 LOCK TABLES `clients` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
+INSERT INTO `clients` VALUES (22,NULL,4445555,NULL,NULL,'Empresa',2012,1),(24,123123,4534,'Don','Ramón',NULL,NULL,0);
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,13 +88,13 @@ CREATE TABLE `movements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
   `description` varchar(200) NOT NULL,
-  `corrency` tinyint(1) NOT NULL DEFAULT '0',
+  `type` tinyint(1) NOT NULL DEFAULT '0',
   `amount` decimal(10,2) NOT NULL,
-  `date` datetime NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `FK_movements_accounts` (`account_id`),
   CONSTRAINT `FK_movements_accounts` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +103,7 @@ CREATE TABLE `movements` (
 
 LOCK TABLES `movements` WRITE;
 /*!40000 ALTER TABLE `movements` DISABLE KEYS */;
+INSERT INTO `movements` VALUES (1,12,'pago de servicio',0,280.00,'2019-05-05 21:19:08'),(2,12,'pago de honorarios',1,2000.00,'2019-05-05 21:24:49'),(3,12,'Reembolso por devolución',1,4000.00,'2019-05-05 21:28:19');
 /*!40000 ALTER TABLE `movements` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -113,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-03 19:35:20
+-- Dump completed on 2019-05-05 18:33:59

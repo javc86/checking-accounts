@@ -3,6 +3,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import clientsActions from '../actions/clientsActions';
 import accountsActions from '../actions/accountsActions';
+import movementsActions from '../actions/movementsActions';
 
 const api = express.Router();
 
@@ -142,6 +143,14 @@ api.post('/accounts/save', async (req, res) => {
             save = false;
         }
 
+        if(req.body.number === undefined || (
+                req.body.number !== undefined && (req.body.number === '' || req.body.number === null || !/^[0-9]*$/.test(req.body.number))
+            )
+        ) {
+            res.send({error: 'No se ha indicado correctamete el número de cuenta con el atributo \'number\'. Solo dígitos'});
+            save = false;
+        }
+
         if(req.body.currency === undefined || (
                 req.body.currency !== undefined && (req.body.currency === '' || req.body.currency === null || !/^[0-2]?1*$/.test(req.body.currency))
             )
@@ -188,7 +197,58 @@ api.get('/accounts/delete/:id', async (req, res) => {
 });
 
 api.post('/movements/save', async (req, res) => {
-    res.send('Creando cuenta');
+    try {
+        let save = true;
+        if(_.isEmpty(req.body)) {
+            res.send({error: 'Data del movimiento vacia'});
+            save = false;
+        }
+
+        if(req.body.account === undefined || (
+                req.body.account !== undefined && (req.body.account === '' || req.body.account === null || !/^[0-9]*$/.test(req.body.account))
+            )
+        ) {
+            res.send({error: 'No se ha indicado correctamete el número de cuenta con el atributo \'account\'. Solo dígitos'});
+            save = false;
+        }
+
+        if(req.body.type === undefined || (
+                req.body.type !== undefined && (req.body.type === '' || req.body.type === null || (req.body.type !== 0 && req.body.type !== 1))
+            )
+        ) {
+            res.send({error: 'No se está indicando el \'type\', que indica el tipo de movimiento (0 para Debito o 1 para Crédito)'});
+            save = false;
+        }
+
+        if(req.body.description === undefined || (
+                req.body.description !== undefined && (req.body.description === '' || req.body.description === null)
+            )
+        ) {
+            res.send({error: 'No se está indicando el \'description\''});
+            save = false;
+        }
+
+        if (req.body.description && req.body.description.length > 200) {
+            res.send({error: 'El atributo \'description\' solo puede tener un máximo de 200 caracteres'});
+            save = false;
+        }
+
+        if(
+            req.body.amount === undefined || (
+                req.body.amount !== undefined && (req.body.amount === '' || req.body.amount === null || !/^\d+(\.\d{1,2})?$/.test(req.body.amount))
+            )
+        ) {
+            res.send({error: 'Debe indicar el \'amount\' (importe) del movimiento con 2 decimales como máximo y separado por punto (#####.##)'});
+            save = false;
+        }
+
+        if (save) {
+            const response = await movementsActions.save(req.body);
+            res.send(JSON.parse(response));
+        }
+    } catch (error) {
+        res.send({error: error});
+    }
 });
 
 export default api;
