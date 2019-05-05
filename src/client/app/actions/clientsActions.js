@@ -33,7 +33,7 @@ export const getSavedClient = (body, callback) => (
                 headers: {'Content-Type': 'application/json'}
             });
             const saved = (await response.json());
-            callback(saved);
+            callback(saved, body.dni);
             return dispatch(onGetSavedClient(saved));
         } catch (error) {
             console.log(error);
@@ -52,6 +52,24 @@ export const getDetailClient = id => (
             const response = await fetch(config.url + '/clients/' + id);
             const details = (await response.json()).result;
             return dispatch(onGetDetailClient(details));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+const onDeleteClient = deleted => ({
+    type: 'GET_DELETED_CLIENT',
+    payload: {deleted}
+});
+
+export const getDeleteClient = (id, callback) => (
+    async dispatch => {
+        try {
+            const response = await fetch(config.url + '/clients/delete/' + id);
+            const deleted = (await response.json());
+            callback();
+            return dispatch(onDeleteClient(deleted));
         } catch (error) {
             console.log(error);
         }

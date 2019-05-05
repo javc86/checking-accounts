@@ -14,12 +14,7 @@ clientsActions.list = () => (
         cn.query(query, (err, rows, fields) => {
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
-                resolve(JSON.stringify({
-                    error: {
-                        code: errorJson.code,
-                        message: errorJson.sqlMessage
-                    }
-                }));
+                resolve(JSON.stringify({error: errorJson.sqlMessage}));
             }
 
             const newRows = rows.map(row => {
@@ -56,12 +51,7 @@ clientsActions.save = data => (
         cn.query(query, (err, result) => {
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
-                resolve(JSON.stringify({
-                    error: {
-                        code: errorJson.code,
-                        message: errorJson.sqlMessage
-                    }
-                }));
+                resolve(JSON.stringify({error: errorJson.sqlMessage}));
             }
 
             if (result && result.length > 0 && (data.id === null || data.id === undefined)) {
@@ -98,12 +88,7 @@ clientsActions.save = data => (
                 cn.query(query, (err, result) => {
                     if (err) {
                         const errorJson = JSON.parse(JSON.stringify(err));
-                        resolve(JSON.stringify({
-                            error: {
-                                code: errorJson.code,
-                                message: errorJson.sqlMessage
-                            }
-                        }));
+                        resolve(JSON.stringify({error: errorJson.sqlMessage}));
                     }
 
                     resolve(JSON.stringify({result: 1}));
@@ -126,18 +111,51 @@ clientsActions.details = id => (
         cn.query(query, (err, result, fields) => {
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
-                resolve(JSON.stringify({
-                    error: {
-                        code: errorJson.code,
-                        message: errorJson.sqlMessage
-                    }
-                }));
+                resolve(JSON.stringify({error: errorJson.sqlMessage}));
             }
 
             resolve(JSON.stringify({result: result.length > 0? result[0] : {}}));
         });
 
         cn.end();
+    })
+);
+
+clientsActions.delete = id => (
+    new Promise((resolve, reject) => {
+        const cn = mysql.createConnection(config);
+
+        cn.connect();
+
+        const query = `SELECT COUNT(*) as total FROM clients c
+                        INNER JOIN accounts a ON c.id = a.client_id
+                        INNER JOIN movements m ON a.id = m.account_id
+                        WHERE c.id = ` + id;
+
+        cn.query(query, (err, result) => {
+            if (err) {
+                const errorJson = JSON.parse(JSON.stringify(err));
+                resolve(JSON.stringify({error: errorJson.sqlMessage}));
+            }
+
+            if (result.total > 0) {
+                resolve(JSON.stringify({error: 'No se puede eliminar el Titular porque tiene movimientos asociados a su cuenta'}));
+                cn.end();
+            } else {
+                query = 'DELETE FROM clients WHERE id = ' + id;
+
+                cn.query(query, (err) => {
+                    if (err) {
+                        const errorJson = JSON.parse(JSON.stringify(err));
+                        resolve(JSON.stringify({error: errorJson.sqlMessage}));
+                    }
+
+                    resolve(JSON.stringify({result: 1}));
+                });
+                
+                cn.end();
+            }
+        });
     })
 );
 

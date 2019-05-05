@@ -14,7 +14,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import styles from './styles';
 
-const DataTable = ({fields, rows}) => (
+const DataTable = ({fields, rows, module, deleteData}) => (
     <Paper style={styles.container}>
         <Table style={styles.table}>
         <TableHead>
@@ -38,19 +38,21 @@ const DataTable = ({fields, rows}) => (
                         </TableCell>
                     ))}
                     <TableCell align="center">
-                        <Link to={'/clients/edit/' + row.id} style={styles.item}>
+                        <Link to={`/${module}/edit/${row.id}`} style={styles.item}>
                             <Fab size="small" aria-label="Add" style={styles.btnEdit}>
                                 <EditIcon fontSize="small"/>
                             </Fab>
                         </Link>
-                        <Link to={'/clients/details/' + row.id} style={styles.item}>
+                        <Link to={`/${module}/details/${row.id}`} style={styles.item}>
                             <Fab size="small" aria-label="Add" style={styles.btnView}>
                                 <VisibilityIcon fontSize="small"/>
                             </Fab>
                         </Link>
-                        <Fab size="small" aria-label="Add" style={styles.btnDelete}>
-                            <DeleteIcon fontSize="small"/>
-                        </Fab>
+                        <Link to="" onClick={e => deleteData(e, row.id)} style={styles.item}>
+                            <Fab size="small" aria-label="Add" style={styles.btnDelete}>
+                                <DeleteIcon fontSize="small"/>
+                            </Fab>
+                        </Link>
                     </TableCell>
                 </TableRow>
             ))}
@@ -74,8 +76,10 @@ const DataTable = ({fields, rows}) => (
 );
 
 DataTable.propTypes = {
-    headers: PropTypes.array,
-    rows: PropTypes.array
+    fields: PropTypes.array.isRequired,
+    rows: PropTypes.array.isRequired,
+    module: PropTypes.string.isRequired,
+    deleteData: PropTypes.func.isRequired,
 };
 
 export default DataTable;

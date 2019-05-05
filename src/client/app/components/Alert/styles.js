@@ -2,7 +2,7 @@ const styles = {
     success: {
         width: 230,
         position: 'absolute',
-        top: 60,
+        top: 150,
         left: 15,
         backgroundColor: '#4caf50',
         color: 'white',
@@ -15,7 +15,7 @@ const styles = {
     error: {
         width: 200,
         position: 'absolute',
-        top: 60,
+        top: 150,
         left: 15,
         backgroundColor: '#ef5350',
         color: 'white',

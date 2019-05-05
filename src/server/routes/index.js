@@ -98,8 +98,13 @@ api.post('/clients/save', async (req, res) => {
     }
 });
 
-api.post('/clients/save/:id', (req, res) => {
-    res.send('lista de cuentas corriente');
+api.get('/clients/delete/:id', async (req, res) => {
+    try {
+        const response = await clientsActions.delete(req.params.id);
+        res.send(JSON.parse(response));
+    } catch (error) {
+        res.send({error: error});
+    }
 });
 
 api.get('/accounts', (req, res) => {

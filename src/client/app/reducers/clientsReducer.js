@@ -1,7 +1,8 @@
 const initialState = {
     list: null,
     saved: null,
-    details: null
+    details: null,
+    deleted: null
 }
 
 export default (state = initialState, action) => {
@@ -12,6 +13,8 @@ export default (state = initialState, action) => {
             return {...state, saved: action.payload.saved};
         case 'GET_CLIENT_DETAILS':
                 return {...state, details: action.payload.details};
+        case 'GET_DELETED_CLIENT':
+                return {...state, deleted: action.payload.deleted};
         default:
             return state;
     }

@@ -139,8 +139,8 @@ class NewEditClient extends Component {
         this.setState({inputErrors});
 
         if (formValid) {
-            getSavedClient(form, saved => {
-                if (saved.result && form.dni === null) {
+            getSavedClient(form, (saved, dni) => {
+                if (saved.result && (dni === null || dni === '')) {
                     this.setState({
                         form: {
                             dni: '',
