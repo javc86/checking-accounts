@@ -138,7 +138,7 @@ clientsActions.delete = id => (
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
             }
 
-            if (result.total > 0) {
+            if (result[0].total > 0) {
                 resolve(JSON.stringify({error: 'No se puede eliminar el Titular porque tiene movimientos asociados a su cuenta'}));
                 cn.end();
             } else {
