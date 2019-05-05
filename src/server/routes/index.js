@@ -170,7 +170,12 @@ api.post('/accounts/save', async (req, res) => {
 });
 
 api.get('/accounts/:id', async (req, res) => {
-    res.send('Detalle de la cuenta corriente');
+    try {
+        const response = await accountsActions.details(req.params.id);
+        res.send(JSON.parse(response));
+    } catch (error) {
+        res.send({error: error});
+    }
 });
 
 api.get('/accounts/delete/:id', async (req, res) => {

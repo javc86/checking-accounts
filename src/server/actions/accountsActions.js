@@ -119,4 +119,60 @@ accountsActions.save = data => (
     })
 );
 
+accountsActions.details = id => (
+    new Promise((resolve, reject) => {
+        const cn = mysql.createConnection(config);
+
+        cn.connect();
+
+        let query = `SELECT c.*, a.* FROM clients c
+                        INNER JOIN accounts a ON c.id = a.client_id
+                        WHERE  a.id = ${id}`;
+
+        cn.query(query, (err1, result1, fields) => {
+            if (err1) {
+                const errorJson = JSON.parse(JSON.stringify(err1));
+                resolve(JSON.stringify({error: errorJson.sqlMessage}));
+                cn.end();
+            } else if (result1.length > 0) {
+
+                let currency = 'Pesos';
+                if (result1[0].currency === 1) currency = 'Dolares';
+                if (result1[0].currency === 2) currency = 'Euros'
+
+                const account = {
+                    id: result1[0].id,
+                    dniCuit: result1[0].dni ? result1[0].dni + ' / ' + result1[0].cuit : result1[0].cuit,
+                    desc: (result1[0].dni !== null ? result1[0].name + ' ' + result1[0].lastname : result1[0].business_name).toUpperCase(),
+                    number: result1[0].number,
+                    currency,
+                    balance: result1[0].balance
+                }
+
+                query = `SELECT * FROM movements WHERE  account_id = ${result1[0].id} ORDER BY date DESC`;
+
+                cn.query(query, (err2, result2, fields) => {
+                    if (err2) {
+                        const errorJson = JSON.parse(JSON.stringify(err2));
+                        resolve(JSON.stringify({error: errorJson.sqlMessage}));
+                        cn.end();
+                    } else {
+                        const dataJson = {
+                            account: account,
+                            movements: result2
+                        }
+
+                        resolve(JSON.stringify({result: dataJson}));
+                        cn.end();
+                    }
+                });
+            } else {
+                resolve(JSON.stringify({error: 'El ID de la cuenta consultada no existe'}));
+                cn.end();
+            }
+        });
+
+    })
+);
+
 export default accountsActions;

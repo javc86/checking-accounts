@@ -25,7 +25,7 @@ class DetailsAccount extends Component {
 
     back() {
         const {history} = this.props;
-        history.push('/');
+        history.push('/accounts');
     }
 
     render() {
@@ -44,79 +44,54 @@ class DetailsAccount extends Component {
                                 ID:
                             </Typography>
                             <Typography variant="h6" style={styles.td}>
-                                {details !== null && details.id}
+                                {details !== null && details.account.id}
                             </Typography>
                         </div>
                         <Divider/>
                         <div style={styles.row}>
                             <Typography variant="h6" style={styles.th}>
-                                Tipo de Titular:
+                                DNI/CUIT:
                             </Typography>
                             <Typography variant="h6" style={styles.td}>
-                                {details !== null ? details.type === 0 ? 'Natural' : 'Jurídico' : null}
+                                {details !== null && details.account.dniCuit}
                             </Typography>
                         </div>
                         <Divider/>
                         <div style={styles.row}>
                             <Typography variant="h6" style={styles.th}>
-                                CUIT:
+                                Titular:
                             </Typography>
                             <Typography variant="h6" style={styles.td}>
-                                {details !== null ? details.cuit : null}
+                                {details !== null && details.account.desc}
                             </Typography>
                         </div>
-                        {details !== null && details.type === 0 && (
-                            <div>
-                                <Divider/>
-                                <div style={styles.row}>
-                                    <Typography variant="h6" style={styles.th}>
-                                        DNI:
-                                    </Typography>
-                                    <Typography variant="h6" style={styles.td}>
-                                        {details.dni}
-                                    </Typography>
-                                </div>
-                            </div>
-                        )}
-                        {details !== null && details.type === 0 && (
-                            <div>
-                                <Divider/>
-                                <div style={styles.row}>
-                                    <Typography variant="h6" style={styles.th}>
-                                        Nombre/Apellido:
-                                    </Typography>
-                                    <Typography variant="h6" style={styles.td}>
-                                        {details.name + ' ' + details.lastname}
-                                    </Typography>
-                                </div>
-                            </div>
-                        )}
-                        {details !== null && details.type === 1 && (
-                            <div>
-                                <Divider/>
-                                <div style={styles.row}>
-                                    <Typography variant="h6" style={styles.th}>
-                                        Razón Social:
-                                    </Typography>
-                                    <Typography variant="h6" style={styles.td}>
-                                        {details.business_name}
-                                    </Typography>
-                                </div>
-                            </div>
-                        )}
-                        {details !== null && details.type === 1 && (
-                            <div>
-                                <Divider/>
-                                <div style={styles.row}>
-                                    <Typography variant="h6" style={styles.th}>
-                                        Año de Inicio:
-                                    </Typography>
-                                    <Typography variant="h6" style={styles.td}>
-                                        {details.start_year}
-                                    </Typography>
-                                </div>
-                            </div>
-                        )}
+                        <Divider/>
+                        <div style={styles.row}>
+                            <Typography variant="h6" style={styles.th}>
+                                N° Cuenta:
+                            </Typography>
+                            <Typography variant="h6" style={styles.td}>
+                                {details !== null && details.account.number}
+                            </Typography>
+                        </div>
+                        <Divider/>
+                        <div style={styles.row}>
+                            <Typography variant="h6" style={styles.th}>
+                                Moneda:
+                            </Typography>
+                            <Typography variant="h6" style={styles.td}>
+                                {details !== null && details.account.currency}
+                            </Typography>
+                        </div>
+                        <Divider/>
+                        <div style={styles.row}>
+                            <Typography variant="h6" style={styles.th}>
+                                Saldo:
+                            </Typography>
+                            <Typography variant="h6" style={styles.td}>
+                                {details !== null && details.account.balance}
+                            </Typography>
+                        </div>
                     </div>
                 </div>
                 <Divider/>

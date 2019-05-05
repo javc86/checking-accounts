@@ -65,9 +65,26 @@ const onGetDetailAccount = details => ({
 export const getDetailAccount = id => (
     async dispatch => {
         try {
-            // const response = await fetch(config.url + '/clients');
-            // const clients = (await response.json()).rows;
-            return dispatch(onGetDetailAccount(null));
+            const response = await fetch(config.url + '/accounts/' + id);
+            const details = (await response.json()).result;
+            return dispatch(onGetDetailAccount(details));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+const onGetDetailClient = details => ({
+    type: 'GET_CLIENT_DETAILS',
+    payload: {details}
+});
+
+export const getDetailClient = id => (
+    async dispatch => {
+        try {
+            const response = await fetch(config.url + '/clients/' + id);
+            const details = (await response.json()).result;
+            return dispatch(onGetDetailClient(details));
         } catch (error) {
             console.log(error);
         }
