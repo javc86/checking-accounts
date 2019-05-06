@@ -12,7 +12,7 @@ webpack
 npm start
 ```
 
-NOTA: En el index se debe cambiar
+NOTA: En el *public/index.html* se debe cambiar
 ```
 <script src="bundle.js"></script>
 ```
