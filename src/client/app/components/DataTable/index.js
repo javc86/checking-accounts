@@ -11,7 +11,7 @@ import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 import styles from './styles';
 

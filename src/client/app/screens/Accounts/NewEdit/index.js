@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 import * as actions from '../../../actions/accountsActions';
 import Alert from '../../../components/Alert';

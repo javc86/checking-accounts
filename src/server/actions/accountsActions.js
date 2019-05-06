@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 import moment from 'moment';
-import config from '../config';
+import {config} from '../config';
 
 const accountsActions = {};
 
@@ -17,28 +17,28 @@ accountsActions.list = () => (
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
+                cn.end();
+            } else {
+                const newRows = rows.map(row => {
+                    const client = (row.dni !== null ? row.name + ' ' + row.lastname : row.business_name).toUpperCase();
+
+                    let currency = 'Pesos';
+                    if (row.currency === 1) currency = 'Dolares';
+                    if (row.currency === 2) currency = 'Euros';
+
+                    return {
+                        id: row.id,
+                        client,
+                        number: row.number,
+                        currency,
+                        balance: row.balance
+                    };
+                });
+
+                resolve(JSON.stringify({rows: newRows}));
+                cn.end();
             }
-
-            const newRows = rows.map(row => {
-                const client = (row.dni !== null ? row.name + ' ' + row.lastname : row.business_name).toUpperCase();
-
-                let currency = 'Pesos';
-                if (row.currency === 1) currency = 'Dolares';
-                if (row.currency === 2) currency = 'Euros';
-
-                return {
-                    id: row.id,
-                    client,
-                    number: row.number,
-                    currency,
-                    balance: row.balance
-                };
-            });
-
-            resolve(JSON.stringify({rows: newRows}));
         });
-
-        cn.end();
     })
 );
 
@@ -56,23 +56,23 @@ accountsActions.clientsWithoutAccount = () => (
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
+                cn.end();
+            } else {
+                const newRows = rows.map(row => {
+                    const dniCuit = row.dni ? row.dni + ' / ' + row.cuit : row.cuit;
+                    const desc = (row.cuit + ' ' + (
+                                    row.dni !== null ? row.name + ' ' + row.lastname : row.business_name
+                                )).toUpperCase();
+                    return {
+                        id: row.id,
+                        desc
+                    };
+                });
+
+                resolve(JSON.stringify({rows: newRows}));
+                cn.end();
             }
-
-            const newRows = rows.map(row => {
-                const dniCuit = row.dni ? row.dni + ' / ' + row.cuit : row.cuit;
-                const desc = (row.cuit + ' ' + (
-                                row.dni !== null ? row.name + ' ' + row.lastname : row.business_name
-                            )).toUpperCase();
-                return {
-                    id: row.id,
-                    desc
-                };
-            });
-
-            resolve(JSON.stringify({rows: newRows}));
         });
-
-        cn.end();
     })
 );
 
@@ -89,9 +89,8 @@ accountsActions.save = data => (
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
-            }
-
-            if (result && result.length > 0 && (data.id === null || data.id === undefined)) {
+                cn.end();
+            }else if (result && result.length > 0 && (data.id === null || data.id === undefined)) {
                 resolve(JSON.stringify({error: 'La cuenta ya existe en la base de datos'}));
                 cn.end();
             } else {
@@ -192,11 +191,8 @@ accountsActions.delete = id => (
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
-            }
-
-            console.log('result', result[0].total);
-
-            if (result[0].total > 0) {
+                cn.end();
+            } else if (result[0].total > 0) {
                 resolve(JSON.stringify({error: 'No se puede eliminar la cuenta porque tiene movimientos asociados'}));
                 cn.end();
             } else {

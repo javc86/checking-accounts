@@ -1,17 +1,31 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import webpack from 'webpack';
-import middleware from 'webpack-dev-middleware';
 import path from 'path';
 import favicon from 'express-favicon';
-import webpackConfig from '../../webpack.config';
+import dotenv from 'dotenv';
 import api from './routes';
 
+dotenv.config();
+
 const app = express();
-app.use(middleware(webpack(webpackConfig)));
+
+if (process.env.APP_ENV === 'dev') {
+    const webpackConfig = require('../../webpack.config');
+    const webpack = require('webpack');
+    const middleware = require('webpack-dev-middleware');
+
+    app.use(middleware(webpack(webpackConfig)))
+};
+
 app.use(bodyParser.json());
-app.use(express.static(path.resolve(__dirname, '../../public')));
-app.use(favicon(path.resolve(__dirname, '../../public/assets/favicon.ico')));
+app.use(express.static(path.resolve(
+    __dirname,
+    process.env.APP_ENV === 'dev' ? '../../public' : '../public'
+)));
+app.use(favicon(path.resolve(
+    __dirname,
+    process.env.APP_ENV === 'dev' ? '../../public/assets/favicon.ico' : '../public/assets/favicon.ico'
+)));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

@@ -33,7 +33,7 @@ export const getSavedClient = (body, callback) => (
                 headers: {'Content-Type': 'application/json'}
             });
             const saved = (await response.json());
-            callback(saved, body.dni);
+            callback(saved, body.id);
             return dispatch(onGetSavedClient(saved));
         } catch (error) {
             console.log(error);

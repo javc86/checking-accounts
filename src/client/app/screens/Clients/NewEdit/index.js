@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
 import * as actions from '../../../actions/clientsActions';
 import Alert from '../../../components/Alert';
@@ -139,8 +139,8 @@ class NewEditClient extends Component {
         this.setState({inputErrors});
 
         if (formValid) {
-            getSavedClient(form, (saved, dni) => {
-                if (saved.result && (dni === null || dni === '')) {
+            getSavedClient(form, (saved, id) => {
+                if (saved.result && (id === null || id === '')) {
                     this.setState({
                         form: {
                             dni: '',

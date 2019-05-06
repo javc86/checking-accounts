@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 import moment from 'moment';
-import config from '../config';
+import {config} from '../config';
 
 const movementsActions = {};
 
@@ -17,9 +17,8 @@ movementsActions.save = data => (
             if (err) {
                 const errorJson = JSON.parse(JSON.stringify(err));
                 resolve(JSON.stringify({error: errorJson.sqlMessage}));
-            }
-
-            if (result && result.length === 0) {
+                cn.end();
+            }else if (result && result.length === 0) {
                 resolve(JSON.stringify({error: 'La cuenta no existe en la base de datos'}));
                 cn.end();
             } else {

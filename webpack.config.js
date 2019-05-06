@@ -1,37 +1,11 @@
-const path = require('path');
+const dotenv = require('dotenv');
 
-module.exports = {
-    mode: 'development',
-    entry: './src/client/index.js',
-    output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                use: ['babel-loader']
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    "style-loader", // creates style nodes from JS strings
-                    "css-loader", // translates CSS into CommonJS
-                    "sass-loader" // compiles Sass to CSS, using Node Sass by default
-                ]
-            },
-            {
-                test: /\.(png|jpe?g|gif|ico)$/,
-                use: ['file-loader']
-            }
-        ]
-    },
-    devServer: {
-        historyApiFallback: true,
-    }
-};
+dotenv.config();
+
+if (process.env.APP_ENV === 'dev') {
+    const webpackConfDev = require('./webpack.dev.config');
+    module.exports = webpackConfDev;
+} else {
+    const webpackConfProd = require('./webpack.prod.config');
+    module.exports = webpackConfProd;
+}

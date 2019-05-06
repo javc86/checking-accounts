@@ -1,10 +1,24 @@
 # Checking Accounts App | Autor: Johander Vazquez
 Aplicación para manejo de Cuentas Corrientes realizada con Reactjs, Redux, Webpack y Nodejs
 
-## Install
+## Instalación para Desarrollo
 ```
 npm install
+npm run dev
+```
+## Instalación para Producción
+```
+webapack
 npm start
+```
+
+NOTA: En el index se debe cambiar
+```
+<script src="bundle.js"></script>
+```
+Por
+```
+<script src="js/bundle.js"></script>
 ```
 
 ## Access Url
