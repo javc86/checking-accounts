@@ -8,7 +8,7 @@ npm run dev
 ```
 ## Instalación para Producción
 ```
-webapack
+webpack
 npm start
 ```
 
